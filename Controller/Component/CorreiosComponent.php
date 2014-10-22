@@ -81,7 +81,7 @@ class CorreiosComponent extends Component {
 	 */
 	public function cep($data, $params=array('formato' => 'json')) {
 		$url = $this->getUrl("republicavirtual", "web_cep.php");
-		$request = $this->makeRequest ($url, array_merge($data, $params));
+		$request = $this->makeRequest($url, array_merge($data, $params));
 		if (!$request->isOk()) {
 			throw new Excpetion('Correios Request Invalid');
 		}
@@ -112,7 +112,6 @@ class CorreiosComponent extends Component {
 	 */
 	protected function makeRequest($url, $params) {
 		$http = new HttpSocket();
-		debug (http_build_query($params, null, '&'));
 		return $http->get($url, http_build_query($params, null, '&'));
 	}
 
