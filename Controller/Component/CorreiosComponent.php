@@ -50,26 +50,12 @@ class CorreiosComponent extends Component {
 	 * @return array
 	 */
 	public function calcPrecoPrazo($data) {
-	}
+		$url = $this->getUrl("correios", "CalcPrecoPrazo.aspx");
+		$request = $this->makeRequest($url, $data);
+		if (!$request->isOk())
+			throw new CakeException($request->body);
 
-	/**
-	 * Method of CalcPreco
-	 *
-	 * @var array $data
-	 * @return array
-	 */
-	public function calcPreco($data) {
-
-	}
-
-	/**
-	 * Method of CalcPrazo
-	 *
-	 * @var array $data
-	 * @return array
-	 */
-	public function calcPrazo($data) {
-
+		return Xml::toArray(Xml::build($request->body));
 	}
 
 	/**
@@ -82,9 +68,8 @@ class CorreiosComponent extends Component {
 	public function cep($data, $params=array('formato' => 'json')) {
 		$url = $this->getUrl("republicavirtual", "web_cep.php");
 		$request = $this->makeRequest($url, array_merge($data, $params));
-		if (!$request->isOk()) {
-			throw new Excpetion('Correios Request Invalid');
-		}
+		if (!$request->isOk())
+			throw new CakeException($request->body);
 
 		if ($params['formato'] === 'json')
 			return (array) json_decode($request->body);
@@ -112,7 +97,7 @@ class CorreiosComponent extends Component {
 	 */
 	protected function makeRequest($url, $params) {
 		$http = new HttpSocket();
-		return $http->get($url, http_build_query($params, null, '&'));
+		return $http->get($url, http_build_query($params));
 	}
 
 }
