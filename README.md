@@ -92,3 +92,13 @@ See also for more details:
 <a href="http://www.correios.com.br/para-voce/correios-de-a-a-z/pdf/calculador-remoto-de-precos-e-prazos/manual-de-implementacao-do-calculo-remoto-de-precos-e-prazos">Manual de implementação do webservice de cálculo de preços e prazos de encomendas</a>
 
 <a href="http://republicavirtual.com.br/cep/">Busca de CEP - WebService de CEP</a>
+
+License
+-------
+
+Correios is offered under an [MIT license](http://www.opensource.org/licenses/mit-license.php).
+
+Copyright
+---------
+
+2014 Rafael Queiroz
