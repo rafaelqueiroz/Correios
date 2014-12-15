@@ -78,6 +78,35 @@ class CorreiosComponent extends Component {
 	}
 
 	/**
+	 * Method of rastreamento
+	 *
+	 * @param string $code
+	 * @return bool
+	 */
+	public function rastreamento($code) {
+		$url = "http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI={$code}";
+		$request  = $this->makeRequest($url);
+
+		$doc = new DOMDocument();
+		@$doc->loadHTML($request->body);
+		
+		$table  = $doc->getElementsByTagName('table')->item(0);
+		if (is_null($table)) {
+			return false;
+		}
+
+		foreach ($table->getElementsByTagName('tr') as $tr) {	
+			foreach ($tr->getElementsByTagName('td') as $td) {
+				if ($td->nodeValue == 'Entrega Efetuada') {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
 	 * Builder the URL.
 	 *
 	 * @param string $name
@@ -95,7 +124,7 @@ class CorreiosComponent extends Component {
 	 * @var array  $params
 	 * @return 
 	 */
-	protected function makeRequest($url, $params) {
+	protected function makeRequest($url, $params = array()) {
 		$http = new HttpSocket();
 		return $http->get($url, http_build_query($params));
 	}
