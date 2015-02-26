@@ -85,25 +85,33 @@ class CorreiosComponent extends Component {
 	 */
 	public function rastreamento($code) {
 		$url = "http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI={$code}";
-		$request  = $this->makeRequest($url);
+		$request = $this->makeRequest($url);
 
 		$doc = new DOMDocument();
 		@$doc->loadHTML($request->body);
 		
-		$table  = $doc->getElementsByTagName('table')->item(0);
+		$table = $doc->getElementsByTagName('table')->item(0);
 		if (is_null($table)) {
 			return false;
 		}
 
-		foreach ($table->getElementsByTagName('tr') as $tr) {	
-			foreach ($tr->getElementsByTagName('td') as $td) {
-				if ($td->nodeValue == 'Entrega Efetuada') {
-					return true;
+		$indexes = $results = array();
+		foreach ($table->getElementsByTagName('tr') as $index => $column) {
+			$values = array();
+			foreach ($column->getElementsByTagName('td') as $value) {
+				if ($index === 0) {
+					$indexes[] = $value->nodeValue;
+				} else {
+					$values[]  = $value->nodeValue;
 				}
 			}
+			if (!$values) {
+				continue;
+			}
+			$results[] = array_combine($indexes, $values);
 		}
-		
-		return false;
+
+		return $results;
 	}
 
 	/**
